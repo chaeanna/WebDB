@@ -1,0 +1,49 @@
+package com.study.board;
+
+import com.study.board.domain.CommentDTO;
+import com.study.board.service.CommentService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class CommentTests {
+
+    @Autowired
+    private CommentService commentService;
+
+    @Test
+    public void registerComments() {
+        int number = 20;
+        for (int i = 1; i <= number; i++) {
+            CommentDTO params = new CommentDTO();
+            params.setBoardIdx((long) 129);
+            params.setContent(i + "번 댓글을 추가합니다!");
+            params.setWriter(i + "번 회원");
+            commentService.registerComment(params);
+        }
+            System.out.println("댓글 " + number + "개가 동륵되었습니다.");
+        }
+
+    @Test
+    public void deleteComment() {
+        commentService.deleteComment((long) 10); // 삭제할 댓글 번호
+
+        getCommentList();
+    }
+
+    @Test
+    public void getCommentList() {
+        CommentDTO params = new CommentDTO();
+        params.setBoardIdx((long) 129); // 댓글을 추가할 게시글 번호
+
+        for (CommentDTO comment : commentService.getCommentList(params)) {
+            System.out.println("=================");
+            System.out.println(comment.getIdx());
+            System.out.println(comment.getBoardIdx());
+            System.out.println(comment.getContent());
+            System.out.println(comment.getWriter());
+            System.out.println("=================");
+        }
+    }
+}
